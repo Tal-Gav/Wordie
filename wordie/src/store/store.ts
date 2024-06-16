@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cardRowReducer from "./cardRowSlice";
-
+import bannedLettersReducer from "./bannedLetters";
 export const store = configureStore({
   reducer: {
     cardRow: cardRowReducer,
+    bannedLetters: bannedLettersReducer,
   },
 });
 

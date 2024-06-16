@@ -15,7 +15,7 @@ const Main = () => {
         Wordie
       </Typography>
       <Box pt={0.5} />
-      <CardsGrid />
+      <CardsGrid isDisabled={false} />
       <CardsGrid />
       <CardsGrid />
       <CardsGrid />
