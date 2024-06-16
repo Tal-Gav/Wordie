@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export enum LetterCardStatus {
   unrevealed = "unrevealed",
@@ -13,41 +13,52 @@ export interface LetterCard {
 }
 
 export interface CardSlice {
-  word: LetterCard[];
+  rows: LetterCard[][];
 }
 
 const initialState: CardSlice = {
-  word: [],
+  rows: Array.from({ length: 6 }, () => []),
 };
 
 export const cardRowSlice = createSlice({
   name: "cardRow",
   initialState,
   reducers: {
-    addLetter: (state, action) => {
-      if (state.word.length < 5) {
-        state.word.push({
-          letter: action.payload,
+    addLetter: (
+      state,
+      action: PayloadAction<{ rowIndex: number; letter: string }>
+    ) => {
+      const { rowIndex, letter } = action.payload;
+
+      if (state.rows[rowIndex].length < 5) {
+        state.rows[rowIndex].push({
+          letter: letter,
           status: LetterCardStatus.unrevealed,
         });
-        console.log(state.word.length);
+        console.log(state.rows[rowIndex].length);
       }
     },
-    removeLetter: (state) => {
-      state.word.pop();
+    removeLetter: (state, action: PayloadAction<{ rowIndex: number }>) => {
+      const { rowIndex } = action.payload;
+      state.rows[rowIndex].pop();
     },
-    clearWord: (state) => {
-      state.word = [];
-    },
-    setLetterStatus: (state, action) => {
-      console.log(action.payload.status);
 
-      state.word[action.payload.index].status = action.payload.status;
+    setLetterStatus: (
+      state,
+      action: PayloadAction<{
+        rowIndex: number;
+        letterIndex: number;
+        status: LetterCardStatus;
+      }>
+    ) => {
+      const { rowIndex, letterIndex, status } = action.payload;
+
+      state.rows[rowIndex][letterIndex].status = status;
     },
   },
 });
 
-export const { addLetter, removeLetter, clearWord, setLetterStatus } =
+export const { addLetter, removeLetter, setLetterStatus } =
   cardRowSlice.actions;
 
 export default cardRowSlice.reducer;

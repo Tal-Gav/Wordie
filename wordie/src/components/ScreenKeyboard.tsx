@@ -12,8 +12,16 @@ import { RootState } from "../store/store";
 import { addBannedLetter } from "../store/bannedLetters";
 import "./index.css";
 
-const ScreenKeyboard = () => {
-  const cardRow = useSelector((state: RootState) => state.cardRow.word);
+interface ScreenKeyboardProps {
+  activeRowIndex: number;
+  setActiveRowIndex: (index: number) => void;
+}
+
+const ScreenKeyboard = ({
+  activeRowIndex,
+  setActiveRowIndex,
+}: ScreenKeyboardProps) => {
+  const cardRows = useSelector((state: RootState) => state.cardRow.rows);
   const bannedLetters = useSelector(
     (state: RootState) => state.bannedLetters.bannedLetters
   );
@@ -27,23 +35,37 @@ const ScreenKeyboard = () => {
   const compareWords = (inputWordie: string, wordie: string) => {
     for (let index = 0; index < inputWordie.length; index++) {
       if (inputWordie[index] === wordie[index]) {
-        dispatch(setLetterStatus({ index, status: LetterCardStatus.correct }));
+        dispatch(
+          setLetterStatus({
+            rowIndex: activeRowIndex,
+            letterIndex: index,
+            status: LetterCardStatus.correct,
+          })
+        );
       } else if (wordie.includes(inputWordie[index])) {
         dispatch(
-          setLetterStatus({ index, status: LetterCardStatus.misplaced })
+          setLetterStatus({
+            rowIndex: activeRowIndex,
+            letterIndex: index,
+            status: LetterCardStatus.misplaced,
+          })
         );
       } else if (!wordie[index].includes(inputWordie[index])) {
         dispatch(
-          setLetterStatus({ index, status: LetterCardStatus.incorrect })
+          setLetterStatus({
+            rowIndex: activeRowIndex,
+            letterIndex: index,
+            status: LetterCardStatus.incorrect,
+          })
         );
         dispatch(addBannedLetter(inputWordie[index]));
       }
-      console.log(cardRow);
     }
+    setActiveRowIndex(activeRowIndex + 1);
   };
   const checkWord = () => {
-    if (cardRow.length === 5) {
-      const inputWordie = cardRow
+    if (cardRows[activeRowIndex].length === 5) {
+      const inputWordie = cardRows[activeRowIndex]
         .map((letterCard) => letterCard.letter)
         .join("");
 
@@ -60,11 +82,10 @@ const ScreenKeyboard = () => {
   const onKeyPress = (buttonStr: string) => {
     console.log("Button pressed", buttonStr);
     if (buttonStr === "{enter}") checkWord();
-    if (buttonStr === "{bksp}") dispatch(removeLetter());
+    if (buttonStr === "{bksp}")
+      dispatch(removeLetter({ rowIndex: activeRowIndex }));
     if (isAlphabetic(buttonStr)) {
-      console.log("here");
-
-      dispatch(addLetter(buttonStr));
+      dispatch(addLetter({ rowIndex: activeRowIndex, letter: buttonStr }));
     }
   };
 

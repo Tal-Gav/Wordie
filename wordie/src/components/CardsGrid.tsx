@@ -2,17 +2,14 @@ import { Box } from "@mui/material";
 import Card from "./Card";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { useEffect } from "react";
 
 interface CardsGridProps {
   isDisabled?: boolean;
+  activeRowIndex: number;
 }
 
-const CardsGrid = ({ isDisabled = true }: CardsGridProps) => {
-  const cardRow = useSelector((state: RootState) => state.cardRow.word);
-  useEffect(() => {
-    console.log(cardRow);
-  }, [cardRow]);
+const CardsGrid = ({ isDisabled = true, activeRowIndex }: CardsGridProps) => {
+  const cardRows = useSelector((state: RootState) => state.cardRow.rows);
 
   return (
     <Box
@@ -23,7 +20,7 @@ const CardsGrid = ({ isDisabled = true }: CardsGridProps) => {
     >
       {!isDisabled
         ? Array.from({ length: 5 }, (_, index) => (
-            <Card key={index} letterCard={cardRow[index]} />
+            <Card key={index} letterCard={cardRows[activeRowIndex][index]} />
           ))
         : Array.from({ length: 5 }, (_, index) => <Card key={index} />)}
     </Box>
