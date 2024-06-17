@@ -28,15 +28,15 @@ const Card = (props: CardProps) => {
     : "#172B35";
   return (
     <Box
-      height={"10vh"}
-      width={"10vh"}
+      height={"100%"}
+      width={"100%"}
       display="flex"
       alignItems="center"
       justifyContent={"center"}
       bgcolor={cardColor}
       color={"#EFEFEF"}
       borderRadius={"0.27em"}
-      fontSize={"3.8rem"}
+      fontSize={"2rem"}
       fontWeight={"bold"}
     >
       {props.letterCard?.letter}

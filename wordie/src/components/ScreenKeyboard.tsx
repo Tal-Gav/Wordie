@@ -148,7 +148,7 @@ const ScreenKeyboard = ({
   return (
     <div
       className={isKeyboardDisabled ? "disabled-container" : ""}
-      style={{ display: "contents" }}
+      style={{ width: "96%" }}
     >
       <Keyboard
         layout={{
@@ -158,6 +158,7 @@ const ScreenKeyboard = ({
             "ז ס ב ה נ מ צ ת ץ",
           ],
         }}
+        display={{ "{bksp}": "מחק", "{enter}": "בדיקה" }}
         buttonTheme={
           bannedLetters.length > 0
             ? [

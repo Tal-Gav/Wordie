@@ -19,6 +19,7 @@ const CardsGrid = ({ activeRowIndex, rowIndex }: CardsGridProps) => {
       display={"flex"}
       flexDirection={"row-reverse"}
       width={"100%"}
+      gap={1}
     >
       {rowIndex === activeRowIndex
         ? Array.from({ length: 5 }, (_, index) => (

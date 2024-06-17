@@ -3,9 +3,5 @@
   background-color: #254b55;
 }
 body {
-  min-height: 100vh;
   margin: 0;
-}
-body > * {
-  box-sizing: border-box;
 }

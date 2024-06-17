@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CardsGrid from "../components/CardsGrid";
 import ScreenKeyboard from "../components/ScreenKeyboard";
 import { useState } from "react";
@@ -12,32 +12,34 @@ const Main = () => {
   return (
     <Box
       minWidth={"100vw"}
-      minHeight={"100vh"}
-      justifyContent={"start"}
       alignItems={"center"}
       display={"flex"}
       flexDirection={"column"}
-      gap={1}
     >
-      <Typography fontSize={"6rem"} fontWeight={"bold"} color={"#EFEFEF"}>
+      <Typography fontSize={"3.5rem"} fontWeight={"bold"} color={"#EFEFEF"}>
         Wordie
       </Typography>
       <Box pt={0.5} />
       <Box
         sx={{
           display: "grid",
+          width: "350px",
+          height: "420px",
+          boxSizing: "border-box",
+          padding: "10px",
+          gridGap: "8px",
+          gridTemplateRows: "repeat(6, 1fr)",
         }}
       >
-        {/* {cardRows.map((_, index) => (
+        {cardRows.map((_, index) => (
           <CardsGrid
             key={index}
             rowIndex={index}
             activeRowIndex={activeRowIndex}
           />
-        ))} */}
+        ))}
       </Box>
-      <Box pt={0.5} />
-
+      <Box pt={5} />
       <ScreenKeyboard
         activeRowIndex={activeRowIndex}
         setActiveRowIndex={setActiveRowIndex}
