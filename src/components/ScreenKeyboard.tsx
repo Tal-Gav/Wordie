@@ -148,7 +148,7 @@ const ScreenKeyboard = ({
   return (
     <div
       className={isKeyboardDisabled ? "disabled-container" : ""}
-      style={{ width: "96%" }}
+      style={{ width: "96%", position: "absolute", bottom: "0", zIndex: "10" }}
     >
       <Keyboard
         layout={{
