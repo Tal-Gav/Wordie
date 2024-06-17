@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import CardsGrid from "../components/CardsGrid";
 import ScreenKeyboard from "../components/ScreenKeyboard";
 import { useState } from "react";
@@ -11,7 +11,9 @@ const Main = () => {
 
   return (
     <Box
-      justifyContent={"center"}
+      minWidth={"100vw"}
+      minHeight={"100vh"}
+      justifyContent={"start"}
       alignItems={"center"}
       display={"flex"}
       flexDirection={"column"}
@@ -21,15 +23,20 @@ const Main = () => {
         Wordie
       </Typography>
       <Box pt={0.5} />
-      {cardRows.map((_, index) => (
-        // TODO: Fix to show the prev cards letters and states
-        <CardsGrid
-          key={index}
-          rowIndex={index}
-          isDisabled={activeRowIndex === index ? false : true}
-          activeRowIndex={activeRowIndex}
-        />
-      ))}
+      <Box
+        sx={{
+          display: "grid",
+        }}
+      >
+        {/* {cardRows.map((_, index) => (
+          <CardsGrid
+            key={index}
+            rowIndex={index}
+            activeRowIndex={activeRowIndex}
+          />
+        ))} */}
+      </Box>
+      <Box pt={0.5} />
 
       <ScreenKeyboard
         activeRowIndex={activeRowIndex}

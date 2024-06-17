@@ -1,3 +1,4 @@
+import "./index.css";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,8 +11,7 @@ import {
 import words from "../assets/words.json";
 import { RootState } from "../store/store";
 import { addBannedLetter } from "../store/bannedLetters";
-import "./index.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LAST_ROW_INDEX } from "../constants";
 import Swal from "sweetalert2";
 
@@ -19,6 +19,12 @@ interface ScreenKeyboardProps {
   activeRowIndex: number;
   setActiveRowIndex: (index: number) => void;
 }
+
+const enum PopupOptions {
+  win = "win",
+  lose = "lose",
+}
+
 const ScreenKeyboard = ({
   activeRowIndex,
   setActiveRowIndex,
@@ -35,15 +41,37 @@ const ScreenKeyboard = ({
     return hebrewRegex.test(buttonStr);
   };
 
-  const increaseRowIndex = () => {
+  const reloadPage = (): void => {
+    window.location.reload();
+  };
+
+  const increaseRowIndex = (): void => {
     if (activeRowIndex < LAST_ROW_INDEX) setActiveRowIndex(activeRowIndex + 1);
+  };
+
+  const showPopup = (popOption: PopupOptions): void => {
+    if (popOption === PopupOptions.win)
+      Swal.fire({
+        title: "You found the word!",
+        text: "text",
+        confirmButtonText: "Close",
+      });
+    else {
+      Swal.fire({
+        title: "You couldn't find the word :(",
+        text: "You want to try again?",
+        confirmButtonText: "Restart",
+      }).then((result) => {
+        if (result.isConfirmed) reloadPage();
+      });
+    }
   };
 
   const setLettersStatus = (
     index: number,
     inputWordie: string,
     wordie: string
-  ) => {
+  ): void => {
     switch (true) {
       case inputWordie[index] === wordie[index]: {
         dispatch(
@@ -79,14 +107,14 @@ const ScreenKeyboard = ({
     }
   };
 
-  const compareToWordie = (inputWordie: string) => {
+  const compareToWordie = (inputWordie: string): void => {
     for (let index = 0; index < inputWordie.length; index++) {
       setLettersStatus(index, inputWordie, words.today);
     }
     increaseRowIndex();
   };
 
-  const checkWord = () => {
+  const checkWord = (): void => {
     if (cardRows[activeRowIndex].length === LAST_ROW_INDEX) {
       const inputWordie = cardRows[activeRowIndex]
         .map((letterCard) => letterCard.letter)
@@ -95,18 +123,19 @@ const ScreenKeyboard = ({
       if (inputWordie === words.today) {
         compareToWordie(inputWordie);
         setIsKeyboardDisabled(true);
-
+        showPopup(PopupOptions.win);
         console.log("good");
       } else {
         compareToWordie(inputWordie);
         if (activeRowIndex === LAST_ROW_INDEX) {
           setIsKeyboardDisabled(true);
+          showPopup(PopupOptions.lose);
         }
         console.log("bad");
       }
     }
   };
-  const onKeyPress = (buttonStr: string) => {
+  const onKeyPress = (buttonStr: string): void => {
     console.log("Button pressed", buttonStr);
     if (buttonStr === "{enter}") checkWord();
     if (buttonStr === "{bksp}")

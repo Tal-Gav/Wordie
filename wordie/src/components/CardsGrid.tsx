@@ -9,11 +9,7 @@ interface CardsGridProps {
   rowIndex: number;
 }
 
-const CardsGrid = ({
-  isDisabled = true,
-  activeRowIndex,
-  rowIndex,
-}: CardsGridProps) => {
+const CardsGrid = ({ activeRowIndex, rowIndex }: CardsGridProps) => {
   const cardRows = useSelector((state: RootState) => state.cardRow.rows);
 
   return (
@@ -22,7 +18,7 @@ const CardsGrid = ({
       alignItems={"center"}
       display={"flex"}
       flexDirection={"row-reverse"}
-      gap={2}
+      width={"100%"}
     >
       {rowIndex === activeRowIndex
         ? Array.from({ length: 5 }, (_, index) => (
