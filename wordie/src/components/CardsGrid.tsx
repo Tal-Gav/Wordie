@@ -6,9 +6,14 @@ import { RootState } from "../store/store";
 interface CardsGridProps {
   isDisabled?: boolean;
   activeRowIndex: number;
+  rowIndex: number;
 }
 
-const CardsGrid = ({ isDisabled = true, activeRowIndex }: CardsGridProps) => {
+const CardsGrid = ({
+  isDisabled = true,
+  activeRowIndex,
+  rowIndex,
+}: CardsGridProps) => {
   const cardRows = useSelector((state: RootState) => state.cardRow.rows);
 
   return (
@@ -16,11 +21,16 @@ const CardsGrid = ({ isDisabled = true, activeRowIndex }: CardsGridProps) => {
       justifyContent={"center"}
       alignItems={"center"}
       display={"flex"}
+      flexDirection={"row-reverse"}
       gap={2}
     >
-      {!isDisabled
+      {rowIndex === activeRowIndex
         ? Array.from({ length: 5 }, (_, index) => (
             <Card key={index} letterCard={cardRows[activeRowIndex][index]} />
+          ))
+        : rowIndex < activeRowIndex
+        ? Array.from({ length: 5 }, (_, index) => (
+            <Card key={index} letterCard={cardRows[rowIndex][index]} />
           ))
         : Array.from({ length: 5 }, (_, index) => <Card key={index} />)}
     </Box>

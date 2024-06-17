@@ -1,5 +1,12 @@
 .disabled-key {
+  background-color: #aeaeaebe !important;
+  color: #e0e0e0 !important;
+  pointer-events: none; /* Prevents interaction */
+}
+
+.disabled-container {
   background-color: #e0e0e0;
   color: #a0a0a0;
-  pointer-events: none; /* Prevents interaction */
+  cursor: not-allowed;
+  pointer-events: none;
 }

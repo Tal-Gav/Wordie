@@ -25,6 +25,7 @@ const Main = () => {
         // TODO: Fix to show the prev cards letters and states
         <CardsGrid
           key={index}
+          rowIndex={index}
           isDisabled={activeRowIndex === index ? false : true}
           activeRowIndex={activeRowIndex}
         />

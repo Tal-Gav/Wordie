@@ -29,13 +29,12 @@ export const cardRowSlice = createSlice({
       action: PayloadAction<{ rowIndex: number; letter: string }>
     ) => {
       const { rowIndex, letter } = action.payload;
-
       if (state.rows[rowIndex].length < 5) {
         state.rows[rowIndex].push({
           letter: letter,
           status: LetterCardStatus.unrevealed,
         });
-        console.log(state.rows[rowIndex].length);
+        console.log(state.rows[rowIndex]);
       }
     },
     removeLetter: (state, action: PayloadAction<{ rowIndex: number }>) => {
