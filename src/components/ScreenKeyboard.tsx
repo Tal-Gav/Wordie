@@ -55,12 +55,14 @@ const ScreenKeyboard = ({
         title: "You found the word!",
         text: "text",
         confirmButtonText: "Close",
+        allowOutsideClick: false,
       });
     else {
       Swal.fire({
         title: "You couldn't find the word :(",
         text: "You want to try again?",
         confirmButtonText: "Restart",
+        allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) reloadPage();
       });
