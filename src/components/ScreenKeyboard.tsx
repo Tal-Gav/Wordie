@@ -14,13 +14,20 @@ import { addBannedLetter } from "../store/bannedLetters";
 import { useState } from "react";
 import { LAST_ROW_INDEX } from "../constants";
 import Swal from "sweetalert2";
+import { db } from "../utils/utils";
+
+import { push, ref } from "firebase/database";
+
+const todaysWordie = "wed-noon";
+const wordie = words[todaysWordie].word;
+const wordieQuote = words[todaysWordie].quote;
 
 interface ScreenKeyboardProps {
   activeRowIndex: number;
   setActiveRowIndex: (index: number) => void;
 }
 
-const enum PopupOptions {
+const enum GameResults {
   win = "win",
   lose = "lose",
 }
@@ -49,19 +56,64 @@ const ScreenKeyboard = ({
     if (activeRowIndex < LAST_ROW_INDEX) setActiveRowIndex(activeRowIndex + 1);
   };
 
-  const showPopup = (popOption: PopupOptions): void => {
-    if (popOption === PopupOptions.win)
+  const getCurrentDateTime = () => {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(now.getDate()).padStart(2, "0");
+
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const submitWordToDB = (
+    inputWord: string,
+    gameResult?: GameResults,
+    isEverySubmit: boolean = false
+  ) => {
+    const dbPath = isEverySubmit
+      ? "words-submit"
+      : gameResult === GameResults.win
+      ? GameResults.win
+      : GameResults.lose;
+
+    const dbRef = ref(db, dbPath);
+    const currentDateTime = getCurrentDateTime();
+
+    push(dbRef, { date: currentDateTime, input: inputWord })
+      .then((msg) => {
+        console.log(msg);
+
+        console.log("Word + date added successfully:", {
+          date: currentDateTime,
+          input: inputWord,
+        });
+      })
+      .catch((error) => {
+        console.error("Error adding data:", error);
+      });
+  };
+  const showPopup = (gameResult: GameResults, inputWord: string): void => {
+    if (gameResult === GameResults.win) {
+      submitWordToDB(inputWord, GameResults.win);
+
       Swal.fire({
-        title: "You found the word!",
-        text: "text",
-        confirmButtonText: "Close",
+        title: "מצאת את המילה המנחה בהצלחה",
+        text: wordieQuote,
+        confirmButtonText: "סגור",
         allowOutsideClick: false,
       });
-    else {
+    } else {
+      submitWordToDB(inputWord, GameResults.lose);
+
       Swal.fire({
-        title: "You couldn't find the word :(",
-        text: "You want to try again?",
-        confirmButtonText: "Restart",
+        title: "לא הצלחת למצוא את המילה המנחה ",
+        text: "תרצה לנסות שוב?",
+        confirmButtonText: "התחל מחדש",
         allowOutsideClick: false,
       }).then((result) => {
         if (result.isConfirmed) reloadPage();
@@ -69,11 +121,7 @@ const ScreenKeyboard = ({
     }
   };
 
-  const setLettersStatus = (
-    index: number,
-    inputWordie: string,
-    wordie: string
-  ): void => {
+  const setLettersStatus = (index: number, inputWordie: string): void => {
     switch (true) {
       case inputWordie[index] === wordie[index]: {
         dispatch(
@@ -111,7 +159,7 @@ const ScreenKeyboard = ({
 
   const compareToWordie = (inputWordie: string): void => {
     for (let index = 0; index < inputWordie.length; index++) {
-      setLettersStatus(index, inputWordie, words.today);
+      setLettersStatus(index, inputWordie);
     }
     increaseRowIndex();
   };
@@ -121,17 +169,17 @@ const ScreenKeyboard = ({
       const inputWordie = cardRows[activeRowIndex]
         .map((letterCard) => letterCard.letter)
         .join("");
-
-      if (inputWordie === words.today) {
+      submitWordToDB(inputWordie, undefined, true);
+      if (inputWordie === wordie) {
         compareToWordie(inputWordie);
         setIsKeyboardDisabled(true);
-        showPopup(PopupOptions.win);
+        showPopup(GameResults.win, inputWordie);
         console.log("good");
       } else {
         compareToWordie(inputWordie);
         if (activeRowIndex === LAST_ROW_INDEX) {
           setIsKeyboardDisabled(true);
-          showPopup(PopupOptions.lose);
+          showPopup(GameResults.lose, inputWordie);
         }
         console.log("bad");
       }
