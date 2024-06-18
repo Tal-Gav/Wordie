@@ -25,10 +25,11 @@ const Main = () => {
   };
   useEffect(() => {
     if (firstRender.current) {
+      showStartPopup();
+
       firstRender.current = false;
       return;
     }
-    showStartPopup();
   });
   return (
     <Box
