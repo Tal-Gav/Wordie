@@ -208,7 +208,7 @@ const ScreenKeyboard = ({
             "ז ס ב ה נ מ צ ת ץ",
           ],
         }}
-        display={{ "{bksp}": "מחק", "{enter}": "בדיקה" }}
+        display={{ "{bksp}": "מחיקה", "{enter}": "שליחה" }}
         buttonTheme={
           bannedLetters.length > 0
             ? [
