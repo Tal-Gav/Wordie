@@ -12,13 +12,12 @@ import words from "../assets/words.json";
 import { RootState } from "../store/store";
 import { addBannedLetter } from "../store/bannedLetters";
 import { useState } from "react";
-import { LAST_ROW_INDEX } from "../constants";
+import { LAST_ROW_INDEX, todaysWordie } from "../constants";
 import Swal from "sweetalert2";
 import { db } from "../utils/utils";
 
 import { push, ref } from "firebase/database";
 
-const todaysWordie = "wed-noon";
 const wordie = words[todaysWordie].word;
 const wordieQuote = words[todaysWordie].quote;
 
