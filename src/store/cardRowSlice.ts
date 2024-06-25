@@ -28,7 +28,6 @@ export const cardRowSlice = createSlice({
           letter: letter,
           status: LetterCardStatus.unrevealed,
         });
-        console.log(state.rows[rowIndex]);
       }
     },
     removeLetter: (state, action: PayloadAction<{ rowIndex: number }>) => {
