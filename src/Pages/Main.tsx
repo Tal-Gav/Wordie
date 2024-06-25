@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
 import CardsGrid from "../components/CardsGrid";
 import ScreenKeyboard from "../components/ScreenKeyboard";
-import { useEffect, useRef, useState } from "react";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import HelpIcon from "../components/HelpIcon";
 
 const Main = () => {
@@ -15,7 +15,7 @@ const Main = () => {
   const showStartPopup = () => {
     Swal.fire({
       title: "!ברוכים הבאים לוֻוֹרְדִי",
-      text: "מטרת המשחק היא לגלות את המילה היומית",
+      text: "🎯מטרת המשחק היא לגלות את המילה היומית",
       confirmButtonText: "!בוא נתחיל",
       allowOutsideClick: false,
     });

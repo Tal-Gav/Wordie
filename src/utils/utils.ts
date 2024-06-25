@@ -13,14 +13,14 @@ const reloadPage = (): void => {
 export const showPopup = (gameResult: GameResults): void => {
   if (gameResult === GameResults.win) {
     Swal.fire({
-      title: "🏆!מצאת את המילה בהצלחה",
+      title: "🏆!מצאת את המילה היומית בהצלחה",
       text: `${puncuatedWordie}: ${wordieQuote}`,
       confirmButtonText: "סגור",
       allowOutsideClick: false,
     });
   } else {
     Swal.fire({
-      title: "לא הצלחת למצוא את המילה",
+      title: "לא הצלחת למצוא את המילה היומית",
       text: "תרצה לנסות שוב?",
       confirmButtonText: "התחל מחדש",
       allowOutsideClick: false,
