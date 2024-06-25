@@ -6,18 +6,15 @@ const HelpIcon = () => {
   const showHelpPopup = () => {
     Swal.fire({
       title: "?איך משחקים בוֻוֹרְדִי",
-      html:
-        `
-יש 6 נסיונות לנחש מילה.
+      html: `
+          יש 6 נסיונות לנחש מילה.
           כל ניחוש חייב להיות מילה אמיתית בת 5 אותיות.
-           אחרי כל ניחוש, האותיות יצבעו בהתאם לכמה שהיו קרובות למילה:
+          אחרי כל ניחוש, האותיות יצבעו בהתאם לכמה שהיו קרובות למילה:
 
-<ul><span style="color: #922219;">אדום</span> - אות לא קיימת במילה</ul>
+            <ul><span style="color: #922219;">אדום</span> - אות לא קיימת במילה</ul>
             <ul><span style="color: #C2AB31;">צהוב</span> - אות קיימת במילה אך במיקום לא נכון</ul>
             <ul><span style="color: #56832E;">ירוק</span> - אות קיימת במילה ומיקומה נכון</ul>
-        ` +
-        'לשאלות ושעות הפעילות ניתן לפנות אלינו באינסטגרם: <a href="https://www.instagram.com/wordie.game">wordie.game@</a>',
-
+        `,
       confirmButtonText: "הבנתי",
       allowOutsideClick: false,
     });

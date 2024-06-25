@@ -10,16 +10,12 @@ import HelpIcon from "../components/HelpIcon";
 const Main = () => {
   const [activeRowIndex, setActiveRowIndex] = useState(0);
   const cardRows = useSelector((state: RootState) => state.cardRow.rows);
-
   const firstRender = useRef(true);
 
   const showStartPopup = () => {
     Swal.fire({
       title: "!ברוכים הבאים לוֻוֹרְדִי",
-      text: "מטרת המשחק היא לגלות את המילה הסודית. לשאלות ניתן לפנות אלינו באינסטגרם: ",
-      html:
-        "מטרת המשחק היא לגלות את המילה הסודית. " +
-        'לשאלות ושעות הפעילות ניתן לפנות אלינו באינסטגרם: <a href="https://www.instagram.com/wordie.game">wordie.game@</a>',
+      text: "מטרת המשחק היא לגלות את המילה היומית",
       confirmButtonText: "!בוא נתחיל",
       allowOutsideClick: false,
     });
@@ -27,9 +23,7 @@ const Main = () => {
   useEffect(() => {
     if (firstRender.current) {
       showStartPopup();
-
       firstRender.current = false;
-      return;
     }
   });
   return (

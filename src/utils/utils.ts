@@ -1,23 +1,31 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import Swal from "sweetalert2";
+import { GameResults, wordie, wordieQuote } from "../constants";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDe3n0Pj6R8QmjDUiKDsGS1XRBFQWR_NY8",
-  authDomain: "wordie-d653d.firebaseapp.com",
-  databaseURL:
-    "https://wordie-d653d-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "wordie-d653d",
-  storageBucket: "wordie-d653d.appspot.com",
-  messagingSenderId: "27137720014",
-  appId: "1:27137720014:web:d4af5d7f3221bcf60fda9f",
+export const isHebrew = (buttonStr: string): boolean => {
+  const hebrewRegex = /^[\u0590-\u05FF]+$/;
+  return hebrewRegex.test(buttonStr);
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const reloadPage = (): void => {
+  window.location.reload();
+};
 
-export const db = getDatabase(app);
+export const showPopup = (gameResult: GameResults): void => {
+  if (gameResult === GameResults.win) {
+    Swal.fire({
+      title: "!מצאת את המילה בהצלחה",
+      text: `${wordie}: ${wordieQuote}`,
+      confirmButtonText: "סגור",
+      allowOutsideClick: false,
+    });
+  } else {
+    Swal.fire({
+      title: "לא הצלחת למצוא את המילה",
+      text: "תרצה לנסות שוב?",
+      confirmButtonText: "התחל מחדש",
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) reloadPage();
+    });
+  }
+};

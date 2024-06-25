@@ -9,7 +9,7 @@ interface CardsGridProps {
   rowIndex: number;
 }
 
-const CardsGrid = ({ activeRowIndex, rowIndex }: CardsGridProps) => {
+const CardsGrid = (props: CardsGridProps) => {
   const cardRows = useSelector((state: RootState) => state.cardRow.rows);
 
   return (
@@ -21,13 +21,16 @@ const CardsGrid = ({ activeRowIndex, rowIndex }: CardsGridProps) => {
       width={"100%"}
       gap={1}
     >
-      {rowIndex === activeRowIndex
+      {props.rowIndex === props.activeRowIndex
         ? Array.from({ length: 5 }, (_, index) => (
-            <Card key={index} letterCard={cardRows[activeRowIndex][index]} />
+            <Card
+              key={index}
+              letterCard={cardRows[props.activeRowIndex][index]}
+            />
           ))
-        : rowIndex < activeRowIndex
+        : props.rowIndex < props.activeRowIndex
         ? Array.from({ length: 5 }, (_, index) => (
-            <Card key={index} letterCard={cardRows[rowIndex][index]} />
+            <Card key={index} letterCard={cardRows[props.rowIndex][index]} />
           ))
         : Array.from({ length: 5 }, (_, index) => <Card key={index} />)}
     </Box>
