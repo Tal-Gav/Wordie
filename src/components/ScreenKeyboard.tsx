@@ -1,28 +1,26 @@
 import "./index.css";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addLetter,
   removeLetter,
-  LetterCardStatus,
   setLetterStatus,
 } from "../store/cardRowSlice";
-import words from "../assets/words.json";
 import { RootState } from "../store/store";
 import { addBannedLetter } from "../store/bannedLetters";
-import { useState } from "react";
-import { LAST_ROW_INDEX } from "../constants";
-import Swal from "sweetalert2";
+import {
+  GameResults,
+  LAST_ROW_INDEX,
+  LetterCardStatus,
+  wordie,
+} from "../constants";
+import { isHebrew, showPopup } from "../utils/utils";
 
 interface ScreenKeyboardProps {
   activeRowIndex: number;
   setActiveRowIndex: (index: number) => void;
-}
-
-const enum PopupOptions {
-  win = "win",
-  lose = "lose",
 }
 
 const ScreenKeyboard = ({
@@ -36,46 +34,13 @@ const ScreenKeyboard = ({
     (state: RootState) => state.bannedLetters.bannedLetters
   );
 
-  const isHebrew = (buttonStr: string): boolean => {
-    const hebrewRegex = /^[\u0590-\u05FF]+$/;
-    return hebrewRegex.test(buttonStr);
-  };
-
-  const reloadPage = (): void => {
-    window.location.reload();
-  };
-
   const increaseRowIndex = (): void => {
     if (activeRowIndex < LAST_ROW_INDEX) setActiveRowIndex(activeRowIndex + 1);
   };
 
-  const showPopup = (popOption: PopupOptions): void => {
-    if (popOption === PopupOptions.win)
-      Swal.fire({
-        title: "You found the word!",
-        text: "text",
-        confirmButtonText: "Close",
-        allowOutsideClick: false,
-      });
-    else {
-      Swal.fire({
-        title: "You couldn't find the word :(",
-        text: "You want to try again?",
-        confirmButtonText: "Restart",
-        allowOutsideClick: false,
-      }).then((result) => {
-        if (result.isConfirmed) reloadPage();
-      });
-    }
-  };
-
-  const setLettersStatus = (
-    index: number,
-    inputWordie: string,
-    wordie: string
-  ): void => {
+  const setLettersStatus = (index: number, guessedWord: string): void => {
     switch (true) {
-      case inputWordie[index] === wordie[index]: {
+      case guessedWord[index] === wordie[index]: {
         dispatch(
           setLetterStatus({
             rowIndex: activeRowIndex,
@@ -85,7 +50,7 @@ const ScreenKeyboard = ({
         );
         break;
       }
-      case wordie.includes(inputWordie[index]): {
+      case wordie.includes(guessedWord[index]): {
         dispatch(
           setLetterStatus({
             rowIndex: activeRowIndex,
@@ -95,7 +60,7 @@ const ScreenKeyboard = ({
         );
         break;
       }
-      case !wordie[index].includes(inputWordie[index]): {
+      case !wordie[index].includes(guessedWord[index]): {
         dispatch(
           setLetterStatus({
             rowIndex: activeRowIndex,
@@ -103,42 +68,44 @@ const ScreenKeyboard = ({
             status: LetterCardStatus.incorrect,
           })
         );
-        dispatch(addBannedLetter(inputWordie[index]));
+        dispatch(addBannedLetter(guessedWord[index]));
         break;
       }
     }
   };
 
-  const compareToWordie = (inputWordie: string): void => {
-    for (let index = 0; index < inputWordie.length; index++) {
-      setLettersStatus(index, inputWordie, words.today);
+  const compareToWordie = (guessedWord: string): void => {
+    for (let index = 0; index < guessedWord.length; index++) {
+      setLettersStatus(index, guessedWord);
     }
     increaseRowIndex();
   };
 
+  const getGuessedWord = (): string => {
+    return cardRows[activeRowIndex]
+      .map((letterCard) => letterCard.letter)
+      .join("");
+  };
+
+  const initGameFinish = (gameResult: GameResults) => {
+    setIsKeyboardDisabled(true);
+    showPopup(gameResult);
+  };
+
   const checkWord = (): void => {
     if (cardRows[activeRowIndex].length === LAST_ROW_INDEX) {
-      const inputWordie = cardRows[activeRowIndex]
-        .map((letterCard) => letterCard.letter)
-        .join("");
+      const guessedWord = getGuessedWord();
+      compareToWordie(guessedWord);
 
-      if (inputWordie === words.today) {
-        compareToWordie(inputWordie);
-        setIsKeyboardDisabled(true);
-        showPopup(PopupOptions.win);
-        console.log("good");
-      } else {
-        compareToWordie(inputWordie);
-        if (activeRowIndex === LAST_ROW_INDEX) {
-          setIsKeyboardDisabled(true);
-          showPopup(PopupOptions.lose);
-        }
-        console.log("bad");
+      if (guessedWord === wordie) {
+        initGameFinish(GameResults.win);
+      }
+      if (activeRowIndex === LAST_ROW_INDEX) {
+        initGameFinish(GameResults.lose);
       }
     }
   };
   const onKeyPress = (buttonStr: string): void => {
-    console.log("Button pressed", buttonStr);
     if (buttonStr === "{enter}") checkWord();
     if (buttonStr === "{bksp}")
       dispatch(removeLetter({ rowIndex: activeRowIndex }));
@@ -160,7 +127,7 @@ const ScreenKeyboard = ({
             "ז ס ב ה נ מ צ ת ץ",
           ],
         }}
-        display={{ "{bksp}": "מחק", "{enter}": "בדיקה" }}
+        display={{ "{bksp}": "מחיקה", "{enter}": "שליחה" }}
         buttonTheme={
           bannedLetters.length > 0
             ? [

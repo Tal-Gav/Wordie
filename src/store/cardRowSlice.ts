@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export enum LetterCardStatus {
-  unrevealed = "unrevealed",
-  correct = "correct",
-  incorrect = "incorrect",
-  misplaced = "misplaced",
-}
+import { LetterCardStatus } from "../constants";
 
 export interface LetterCard {
   letter: string;

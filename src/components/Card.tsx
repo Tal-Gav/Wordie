@@ -1,31 +1,30 @@
 import Box from "@mui/material/Box";
 import { LetterCard } from "../store/cardRowSlice";
-import { LetterCardStatus } from "../store/cardRowSlice";
+import { LetterCardStatus, LetterCardStatusColors } from "../constants";
+
 interface CardProps {
   letterCard?: LetterCard;
 }
 
 const Card = (props: CardProps) => {
   const getStatusColor = (letterStatus: LetterCardStatus) => {
-    console.log(letterStatus);
-
     switch (true) {
       case letterStatus === LetterCardStatus.unrevealed:
-        return "#172B35";
+        return LetterCardStatusColors.unrevealed;
       case letterStatus === LetterCardStatus.correct:
-        return "#56832E";
+        return LetterCardStatusColors.correct;
       case letterStatus === LetterCardStatus.incorrect:
-        return "#922219";
+        return LetterCardStatusColors.incorrect;
       case letterStatus === LetterCardStatus.misplaced:
-        return "#C2AB31";
+        return LetterCardStatusColors.misplaced;
 
       default:
-        return "#172B35";
+        return LetterCardStatusColors.unrevealed;
     }
   };
   const cardColor = props.letterCard
     ? getStatusColor(props.letterCard.status)
-    : "#172B35";
+    : LetterCardStatusColors.unrevealed;
   return (
     <Box
       height={"100%"}
