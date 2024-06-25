@@ -52,7 +52,6 @@ const Main = () => {
           fontSize={"3.5rem"}
           fontWeight={"bold"}
           color={"#EFEFEF"}
-          letterSpacing={4}
           fontFamily={"Alef-Bold"}
         >
           וֻוֹרְדִי
