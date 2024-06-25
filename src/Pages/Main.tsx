@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
+import ConfettiExplosion from "react-confetti-explosion";
 import CardsGrid from "../components/CardsGrid";
 import ScreenKeyboard from "../components/ScreenKeyboard";
 import { RootState } from "../store/store";
@@ -9,13 +10,14 @@ import HelpIcon from "../components/HelpIcon";
 
 const Main = () => {
   const [activeRowIndex, setActiveRowIndex] = useState(0);
+  const [isConfetti, setIsConfetti] = useState(false);
   const cardRows = useSelector((state: RootState) => state.cardRow.rows);
   const firstRender = useRef(true);
 
   const showStartPopup = () => {
     Swal.fire({
       title: "!ברוכים הבאים לוֻוֹרְדִי",
-      text: "🎯מטרת המשחק היא לגלות את המילה היומית",
+      text: "מטרת המשחק היא לגלות את המילה היומית🎯",
       confirmButtonText: "!בוא נתחיל",
       allowOutsideClick: false,
     });
@@ -34,6 +36,14 @@ const Main = () => {
         display={"flex"}
         flexDirection={"column"}
       >
+        {isConfetti && (
+          <ConfettiExplosion
+            force={0.8}
+            duration={3000}
+            particleCount={250}
+            width={1600}
+          />
+        )}
         <Box position={"absolute"} top={1} right={1}>
           <HelpIcon />
         </Box>
@@ -43,6 +53,7 @@ const Main = () => {
           fontWeight={"bold"}
           color={"#EFEFEF"}
           letterSpacing={4}
+          fontFamily={"Alef-Bold"}
         >
           וֻוֹרְדִי
         </Typography>
@@ -70,6 +81,7 @@ const Main = () => {
         <ScreenKeyboard
           activeRowIndex={activeRowIndex}
           setActiveRowIndex={setActiveRowIndex}
+          setIsConfetti={setIsConfetti}
         />
       </Box>
     </>

@@ -9,3 +9,8 @@ body {
 .swal2-html-container {
   direction: rtl;
 }
+
+@font-face {
+  font-family: "Alef-Bold";
+  src: local("Alef-Bold"), url("./fonts/Alef-Bold.ttf") format("truetype");
+}

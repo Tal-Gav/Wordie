@@ -3,6 +3,7 @@ import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import {
   addLetter,
   removeLetter,
@@ -15,17 +16,21 @@ import {
   LAST_ROW_INDEX,
   LetterCardStatus,
   wordie,
+  puncuatedWordie,
+  wordieQuote,
 } from "../constants";
-import { isHebrew, showPopup } from "../utils/utils";
+import { isHebrew, reloadPage } from "../utils/utils";
 
 interface ScreenKeyboardProps {
   activeRowIndex: number;
   setActiveRowIndex: (index: number) => void;
+  setIsConfetti: (isConfetti: boolean) => void;
 }
 
 const ScreenKeyboard = ({
   activeRowIndex,
   setActiveRowIndex,
+  setIsConfetti,
 }: ScreenKeyboardProps) => {
   const dispatch = useDispatch();
   const [isKeyboardDisabled, setIsKeyboardDisabled] = useState(false);
@@ -85,6 +90,29 @@ const ScreenKeyboard = ({
     return cardRows[activeRowIndex]
       .map((letterCard) => letterCard.letter)
       .join("");
+  };
+
+  const showPopup = (gameResult: GameResults): void => {
+    if (gameResult === GameResults.win) {
+      setIsConfetti(true);
+      setTimeout(() => {
+        Swal.fire({
+          title: "🏆!מצאת את המילה היומית",
+          text: `${puncuatedWordie}: ${wordieQuote}`,
+          confirmButtonText: "סגור",
+          allowOutsideClick: false,
+        });
+      }, 1600);
+    } else {
+      Swal.fire({
+        title: "לא הצלחת למצוא את המילה היומית",
+        text: "תרצה לנסות שוב?",
+        confirmButtonText: "התחל מחדש",
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) reloadPage();
+      });
+    }
   };
 
   const initGameFinish = (gameResult: GameResults) => {
