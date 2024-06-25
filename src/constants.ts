@@ -2,6 +2,7 @@ import words from "./assets/words.json";
 
 export const LAST_ROW_INDEX = 5;
 export const wordie = words.sunday.word;
+export const puncuatedWordie = words.sunday.puncuatedWord;
 export const wordieQuote = words.sunday.quote;
 
 export enum LetterCardStatus {
