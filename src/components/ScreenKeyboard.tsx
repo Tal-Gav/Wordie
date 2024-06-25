@@ -97,7 +97,7 @@ const ScreenKeyboard = ({
       setIsConfetti(true);
       setTimeout(() => {
         Swal.fire({
-          title: "!מצאת את המילה היומית🏆",
+          title: "מצאת את המילה היומית!🏆",
           text: `${puncuatedWordie}: ${wordieQuote}`,
           confirmButtonText: "סגור",
           allowOutsideClick: false,

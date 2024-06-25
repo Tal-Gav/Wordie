@@ -16,9 +16,9 @@ const Main = () => {
 
   const showStartPopup = () => {
     Swal.fire({
-      title: "!ברוכים הבאים לוֻוֹרְדִי",
+      title: "ברוכים הבאים לוֻוֹרְדִי!",
       text: "מטרת המשחק היא לגלות את המילה היומית🎯",
-      confirmButtonText: "!בוא נתחיל",
+      confirmButtonText: "בוא נתחיל!",
       allowOutsideClick: false,
     });
   };
