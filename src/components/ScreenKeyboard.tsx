@@ -127,8 +127,7 @@ const ScreenKeyboard = ({
 
       if (guessedWord === wordie) {
         initGameFinish(GameResults.win);
-      }
-      if (activeRowIndex === LAST_ROW_INDEX) {
+      } else if (activeRowIndex === LAST_ROW_INDEX) {
         initGameFinish(GameResults.lose);
       }
     }
